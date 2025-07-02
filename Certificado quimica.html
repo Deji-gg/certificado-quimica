@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificado - Missão Química</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://i.postimg.cc/6qb3TV7d/fondo-web.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .pantalla, .certificado-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .pantalla.active, .certificado-container.active {
+      display: flex;
+    }
+
+    .pantalla h1 {
+      font-size: 36px;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .pantalla p {
+      font-size: 18px;
+      font-weight: 400;
+      max-width: 600px;
+    }
+
+    .pantalla input {
+      margin-top: 30px;
+      padding: 12px 20px;
+      font-size: 20px;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      width: 300px;
+      font-weight: 900;
+    }
+
+    .pantalla button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #000000;
+      cursor: pointer;
+    }
+
+    .certificado {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: url('https://i.postimg.cc/7Z1ZvyHv/fondo-del-certificado.png') no-repeat center center;
+      background-size: contain;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .titulo {
+      font-size: 3vw;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .nombre {
+      font-size: 2.3vw;
+      font-weight: 700;
+    }
+
+    .linea {
+      width: 50%;
+      height: 2px;
+      background-color: white;
+      margin: 10px auto 20px auto;
+    }
+
+    .descripcion {
+      font-size: 1.2vw;
+      font-weight: 400;
+      max-width: 80%;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .nombre-input {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid white;
+      color: white;
+      text-align: center;
+      width: 300px;
+      outline: none;
+    }
+
+    .botones {
+      margin-top: 30px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .botones button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #000000;
+      cursor: pointer;
+    }
+
+    .botones button:hover {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de código -->
+  <div id="pantalla-codigo" class="pantalla active">
+    <h1>Parabéns por chegar até aqui, agente!</h1>
+    <p>
+      Agora, para prosseguir com a missão, você precisará inserir o código numérico secreto descoberto no enigma anterior. <br><br>
+      Somente quem decifrou corretamente poderá abrir a próxima porta do laboratório.
+    </p>
+    <input id="codigoInput" type="text" placeholder="🧠 Insira o Código" />
+    <button onclick="verificarCodigo()">Prosseguir</button>
+  </div>
+
+  <!-- Certificado -->
+  <div id="certificado-container" class="certificado-container">
+    <div id="certificado" class="certificado">
+      <div class="titulo">CERTIFICADO</div>
+      <div id="nombre-mostrado" class="nombre">SEU NOME AQUI</div>
+      <div class="linea"></div>
+      <div class="descripcion">
+        Por demonstrar raciocínio lógico, espírito investigativo e domínio dos conhecimentos químicos ao desvendar os enigmas do "Guardião do Elétron Perdido" e abrir com sucesso a "Porta do Período Secreto"
+      </div>
+    </div>
+    <input class="nombre-input" type="text" placeholder="Digite seu nome aqui" oninput="actualizarNombre(this.value)" />
+    <div class="botones">
+      <button onclick="descargarPNG()">Baixar como PNG</button>
+      <button onclick="descargarPDF()">Baixar como PDF</button>
+    </div>
+  </div>
+
+  <script>
+    function verificarCodigo() {
+      const codigo = document.getElementById("codigoInput").value.trim();
+      if (codigo === "-4") {
+        document.getElementById("pantalla-codigo").classList.remove("active");
+        document.getElementById("certificado-container").classList.add("active");
+      } else {
+        alert("Código incorreto. Tente novamente.");
+      }
+    }
+
+    function actualizarNombre(nombre) {
+      document.getElementById("nombre-mostrado").innerText = nombre || "SEU NOME AQUI";
+    }
+
+    function descargarPNG() {
+      const certificado = document.getElementById("certificado");
+      html2canvas(certificado, {
+        scale: 2,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "certificado.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    async function descargarPDF() {
+      const { jsPDF } = window.jspdf;
+      const certificado = document.getElementById("certificado");
+
+      const canvas = await html2canvas(certificado, {
+        scale: 2,
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF('landscape', 'px', [canvas.width, canvas.height]);
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save("certificado.pdf");
+    }
+  </script>
+
+</body>
+</html>
+
